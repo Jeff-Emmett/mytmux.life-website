@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { writable } from 'svelte/store';
 
     let { 
         layout = { type: 'pane', id: 0 },
@@ -8,11 +9,13 @@
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D | null = null;
-    let containerWidth = $state(0);
-    let containerHeight = $state(0);
     let animationFrameId: number;
     let lastTime = 0;
     let cursorBlink = true;
+
+    // Reactive state
+    const containerWidth = writable(0);
+    const containerHeight = writable(0);
 
     // Colors
     const BG_COLOR = '#0a0a0a';
@@ -21,9 +24,11 @@
     const TEXT_COLOR = '#00ff00';
     const MUTED_TEXT = '#444444';
 
+    const drawTrigger = writable(false);
+
     $effect(() => {
-        if (canvas && layout) {
-            draw();
+        if (canvas && layout && $containerWidth && $containerHeight) {
+            drawTrigger.set(true);
         }
     });
 
@@ -44,7 +49,7 @@
             containerWidth.set(rect.width);
             containerHeight.set(rect.height);
             
-            draw();
+            drawTrigger.set(true);
         }
     }
 
@@ -52,7 +57,7 @@
         if (time - lastTime > 500) { // Blink every 500ms
             cursorBlink = !cursorBlink;
             lastTime = time;
-            draw();
+            drawTrigger.set(true);
         }
         animationFrameId = requestAnimationFrame(animate);
     }
@@ -75,10 +80,10 @@
         
         // Clear
         ctx.fillStyle = BG_COLOR;
-        ctx.fillRect(0, 0, containerWidth.get(), containerHeight.get());
+        ctx.fillRect(0, 0, $containerWidth, $containerHeight);
 
         // Draw Layout
-        drawNode(layout, 0, 0, containerWidth.get(), containerHeight.get());
+        drawNode(layout, 0, 0, $containerWidth, $containerHeight);
     }
 
     function drawNode(node: any, x: number, y: number, w: number, h: number) {
@@ -144,6 +149,14 @@
             drawNode(node.children[1], x + w1, y, w2, h);
         }
     }
+
+    $effect(() => {
+        drawTrigger.subscribe(value => {
+            if (value) {
+                draw();
+            }
+        });
+    });
 </script>
 
 <div class="w-full h-full min-h-[400px] bg-black border border-border relative group overflow-hidden">
@@ -153,6 +166,6 @@
     <div class="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%]"></div>
     
     <div class="absolute bottom-2 right-2 text-[10px] text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity z-20 font-mono">
-        RENDERER: CANVAS_2D // {containerWidth.get()}x{containerHeight.get()}
+        RENDERER: CANVAS_2D // {$containerWidth}x{$containerHeight}
     </div>
 </div>

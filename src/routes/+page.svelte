@@ -119,7 +119,7 @@
  |  root@mytmux:~ $ tmux new -s dev          |
  |  [0] nvim ---------------- [1] server --  |
  |  |                        |            |  |
- |  |   import { life }      |  npm run   |  |
+ |  |   import {'{ life }'}      |  npm run   |  |
  |  |     from 'tmux';       |   dev      |  |
  |  |                        |            |  |
  |  |   // TODO: Sleep       |            |  |
