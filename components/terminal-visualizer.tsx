@@ -1,11 +1,22 @@
 "use client"
 
+import type React from "react"
+
 import { useEffect, useRef, useState } from "react"
 import type { LayoutNode } from "@/app/page"
 
 interface TerminalVisualizerProps {
   layout: LayoutNode
   activePaneId: number
+}
+
+interface MatrixStream {
+  x: number
+  y: number
+  speed: number
+  chars: string[]
+  length: number
+  firstChar: string
 }
 
 export default function TerminalVisualizer({ layout, activePaneId }: TerminalVisualizerProps) {
@@ -15,15 +26,26 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
   const lastTimeRef = useRef<number>(0)
   const cursorBlinkRef = useRef<boolean>(true)
 
+  // Matrix Rain Refs
+  const streamsRef = useRef<MatrixStream[]>([])
+  const mouseRef = useRef({ x: 0, y: 0 })
+  const lastSpawnTimeRef = useRef(0)
+
   // Colors
-  const BG_COLOR = "#0a0a0a"
-  const BORDER_COLOR = "#333333"
-  const ACTIVE_BORDER_COLOR = "#00ff00"
-  const TEXT_COLOR = "#00ff00"
-  const MUTED_TEXT = "#444444"
+  const BG_COLOR = "#000000" // Pure black for hacker vibe
+  const BORDER_COLOR = "#004400" // Dark green border
+  const ACTIVE_BORDER_COLOR = "#33ff00"
+  const TEXT_COLOR = "#33ff00"
+  const MUTED_TEXT = "#006600" // More visible muted green
+  const MATRIX_CHARS = "0123456789ABCDEF"
+
+  const fontFamilyRef = useRef("monospace")
 
   // Handle resize
   useEffect(() => {
+    const computedStyle = window.getComputedStyle(document.body)
+    fontFamilyRef.current = computedStyle.fontFamily || "monospace"
+
     const handleResize = () => {
       if (canvasRef.current && canvasRef.current.parentElement) {
         const parent = canvasRef.current.parentElement
@@ -43,12 +65,57 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    mouseRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    }
+  }
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const touch = e.touches[0]
+    if (touch) {
+      mouseRef.current = {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top,
+      }
+    }
+  }
+
   // Animation Loop
   useEffect(() => {
     const animate = (time: number) => {
       if (time - lastTimeRef.current > 500) {
         cursorBlinkRef.current = !cursorBlinkRef.current
         lastTimeRef.current = time
+      }
+
+      // Spawn matrix streams from cursor
+      if (time - lastSpawnTimeRef.current > 50) {
+        // Spawn every 50ms
+        const x = mouseRef.current.x
+        const y = mouseRef.current.y
+
+        // Snap to grid columns roughly
+        const colWidth = 14
+        const snappedX = Math.floor(x / colWidth) * colWidth
+
+        // Only spawn if we moved or randomly
+        if (Math.random() > 0.7) {
+          streamsRef.current.push({
+            x: snappedX,
+            y: y,
+            speed: 2 + Math.random() * 3,
+            chars: Array(20)
+              .fill(0)
+              .map(() => MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]),
+            length: 5 + Math.floor(Math.random() * 8),
+            firstChar: MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)],
+          })
+          lastSpawnTimeRef.current = time
+        }
       }
 
       // Trigger a redraw
@@ -60,11 +127,7 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
     animationRef.current = requestAnimationFrame(animate)
 
     return () => cancelAnimationFrame(animationRef.current)
-  }) // No dependency array to ensure it always has access to latest props via closure if needed,
-  // but actually we should probably use refs for props if we want to avoid re-binding the loop.
-  // However, since we call draw() which uses the props, we need to make sure draw() sees the latest props.
-  // The best way in React for a canvas loop is often to use refs for the mutable state or just let the effect re-run.
-  // Let's optimize:
+  })
 
   // Drawing Logic
   const draw = () => {
@@ -87,10 +150,53 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
 
     // Draw Layout
     drawNode(ctx, layout, 0, 0, width, height)
+
+    // Draw Matrix Rain
+    drawMatrixRain(ctx, width, height)
+  }
+
+  const drawMatrixRain = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
+    ctx.font = `20px ${fontFamilyRef.current}`
+
+    // Update and draw streams
+    for (let i = streamsRef.current.length - 1; i >= 0; i--) {
+      const stream = streamsRef.current[i]
+      stream.y += stream.speed
+
+      // Randomly change characters
+      if (Math.random() > 0.9) {
+        stream.firstChar = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
+      }
+
+      // Draw the stream
+      for (let j = 0; j < stream.length; j++) {
+        const charY = stream.y - j * 20 // Adjusted spacing for larger font
+
+        // Don't draw if off screen (above or below)
+        if (charY > h + 20) continue
+
+        // Opacity fade based on position in tail
+        const opacity = (1 - j / stream.length) * 0.8
+
+        if (j === 0) {
+          // Head of the stream (bright white/green)
+          ctx.fillStyle = `rgba(200, 255, 200, ${opacity})`
+          ctx.fillText(stream.firstChar, stream.x, charY)
+        } else {
+          // Tail (green)
+          ctx.fillStyle = `rgba(51, 255, 0, ${opacity * 0.5})`
+          ctx.fillText(stream.chars[j % stream.chars.length], stream.x, charY)
+        }
+      }
+
+      // Remove if off screen or fully faded
+      if (stream.y - stream.length * 20 > h || stream.y > h + 100) {
+        streamsRef.current.splice(i, 1)
+      }
+    }
   }
 
   function drawNode(ctx: CanvasRenderingContext2D, node: LayoutNode, x: number, y: number, w: number, h: number) {
-    // Add a small gap for the border
     const gap = 2
 
     if (node.type === "pane") {
@@ -114,7 +220,7 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
       ctx.shadowBlur = 0 // Reset
 
       // Draw Pane ID/Status
-      ctx.font = '12px "JetBrains Mono", monospace'
+      ctx.font = `18px ${fontFamilyRef.current}`
       ctx.fillStyle = node.id === activePaneId ? TEXT_COLOR : MUTED_TEXT
       ctx.fillText(`[${node.id}] zsh`, x + 15, y + 25)
 
@@ -153,7 +259,13 @@ export default function TerminalVisualizer({ layout, activePaneId }: TerminalVis
 
   return (
     <div className="w-full h-full min-h-[400px] bg-black border border-border relative group overflow-hidden">
-      <canvas ref={canvasRef} className="block w-full h-full"></canvas>
+      <canvas
+        ref={canvasRef}
+        className="block w-full h-full cursor-crosshair touch-none"
+        onMouseMove={handleMouseMove}
+        onTouchMove={handleTouchMove}
+        onTouchStart={handleTouchMove}
+      ></canvas>
 
       {/* Scanline overlay for the canvas specifically */}
       <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%]"></div>

@@ -1,10 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { JetBrains_Mono } from "next/font/google"
+import { VT323 } from "next/font/google"
 import "./globals.css"
 import Link from "next/link"
 
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
+const vt323 = VT323({ weight: "400", subsets: ["latin"], variable: "--font-vt323" })
 
 export const metadata: Metadata = {
   title: "mytmux.life - Terminal Multiplexer Configurator",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={jetbrainsMono.className}>
+      <body className={`${vt323.className} ${vt323.variable} text-lg`}>
         <div className="scanline"></div>
         <div className="min-h-screen flex flex-col">
           <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
