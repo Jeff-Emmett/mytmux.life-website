@@ -6,9 +6,9 @@
         activePaneId = 0
     } = $props();
 
-    let canvas: HTMLCanvasElement;
-    let ctx: CanvasRenderingContext2D | null = null;
-    let animationFrameId: number;
+    let canvas;
+    let ctx = null;
+    let animationFrameId;
     let lastTime = 0;
     let cursorBlink = true;
 
@@ -55,7 +55,7 @@
         }
     }
 
-    function animate(time: number) {
+    function animate(time) {
         if (time - lastTime > 500) { // Blink every 500ms
             cursorBlink = !cursorBlink;
             lastTime = time;
@@ -88,7 +88,7 @@
         drawNode(layout, 0, 0, containerWidth, containerHeight);
     }
 
-    function drawNode(node: any, x: number, y: number, w: number, h: number) {
+    function drawNode(node, x, y, w, h) {
         if (!ctx) return;
 
         // Add a small gap for the border
