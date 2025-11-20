@@ -175,7 +175,7 @@ export default function Home() {
                 href="#learn"
                 className="inline-flex h-12 items-center justify-center border border-input bg-background px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
               >
-                READ_MAN_PAGE
+                TMUX-IFESTO
               </a>
             </div>
           </div>

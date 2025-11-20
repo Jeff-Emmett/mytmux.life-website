@@ -49,7 +49,16 @@ export default function RootLayout({
                 Built by{" "}
                 <Link href="/about" className="font-medium underline underline-offset-4 text-primary">
                   Shawn Anderson
-                </Link>
+                </Link>{" "}
+                and{" "}
+                <a
+                  href="https://github.com/Jeff-Emmett"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium underline underline-offset-4 text-primary"
+                >
+                  Jeff Emmett
+                </a>
                 . The source code is available on{" "}
                 <a
                   href="https://github.com/Jeff-Emmett/mytmux.life-website"
