@@ -15,9 +15,9 @@
                     <span class="animate-pulse inline-block w-2 h-4 bg-primary"></span>
                 </a>
                 <nav class="flex items-center space-x-6 text-sm font-medium text-muted-foreground">
-                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="#learn">/docs</a>
-                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="#configurator">/config</a>
-                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="#about">/about</a>
+                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="/#learn">/docs</a>
+                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="/#configurator">/config</a>
+                    <a class="transition-colors hover:text-primary hover:underline decoration-primary underline-offset-4" href="/about">/about</a>
                 </nav>
             </div>
             <div class="flex flex-1 items-center justify-end space-x-2">
