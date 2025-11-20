@@ -2,7 +2,8 @@
 
 @theme inline {
   --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  --font-sans: var(--font-mono); /* Force mono everywhere for the nerdy vibe */
+  /* Explicitly defining font-sans instead of using var() to avoid potential resolution issues in Tailwind v4 */
+  --font-sans: "JetBrains Mono", "Fira Code", "Courier New", monospace;
 
   --color-background: #0a0a0a;
   --color-foreground: #00ff00; /* Terminal Green */
