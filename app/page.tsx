@@ -264,49 +264,135 @@ export default function Home() {
 
       {/* Documentation / Info Section */}
       <section id="learn" className="container px-4 py-12">
+        <div className="flex flex-col space-y-4 mb-8">
+          <h2 className="text-3xl font-bold tracking-tight border-l-4 border-primary pl-4">THE_TMUX_IFESTO</h2>
+          <p className="text-muted-foreground">The philosophy of persistent, multiplexed terminal environments.</p>
+        </div>
         <div className="grid md:grid-cols-3 gap-12">
           <div className="md:col-span-1 space-y-2">
-            <h3 className="text-xl font-bold text-primary">01. MULTIPLEXING</h3>
+            <h3 className="text-xl font-bold text-primary">01. PERSISTENCE</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Run multiple terminal sessions inside one single window. Detach them and leave them running in the
-              background, then reattach later.
+              Your work should not die when your connection drops. Detach your session, go home, and reattach exactly
+              where you left off. The session lives on the server, independent of your client.
             </p>
           </div>
           <div className="md:col-span-1 space-y-2">
-            <h3 className="text-xl font-bold text-primary">02. WINDOWS & PANES</h3>
+            <h3 className="text-xl font-bold text-primary">02. MULTIPLEXING</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Organize your workspace into windows (tabs) and panes (splits). Keep your editor, server logs, and git
-              commands visible at once.
+              One terminal is never enough. Split your workspace into windows (tabs) and panes (tiled splits). Monitor
+              logs, edit code, and run git commands simultaneously in a single SSH connection.
             </p>
           </div>
           <div className="md:col-span-1 space-y-2">
             <h3 className="text-xl font-bold text-primary">03. CONFIGURATION</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Tmux is highly scriptable. Bind keys, change status bar colors, and create custom layouts to fit your
-              specific workflow needs.
+              The terminal is your canvas. Script your layouts, bind custom keys, and automate your startup. A
+              well-configured tmux environment is a force multiplier for any developer.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Setup Section */}
+      <section className="container px-4 py-12 border-t border-border">
+        <h2 className="text-2xl font-bold mb-8">MOBILE_DEPLOYMENT_PROTOCOLS</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Android Protocol */}
+          <div className="border border-border bg-card p-6 space-y-4">
+            <h3 className="text-xl font-bold text-primary flex items-center gap-2">
+              <span className="text-xs bg-primary text-black px-1">ANDROID</span>
+              <span>TERMUX_PROTOCOL</span>
+            </h3>
+            <div className="space-y-4 text-sm text-muted-foreground font-mono">
+              <div className="flex gap-4">
+                <span className="text-primary">01.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Acquire F-Droid</p>
+                  <p>Download the F-Droid APK from f-droid.org to access the open-source repository.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-primary">02.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Install Termux</p>
+                  <p>Search for "Termux" within F-Droid. Do not use the Play Store version (deprecated).</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-primary">03.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Initialize Environment</p>
+                  <div className="bg-black p-2 mt-1 border border-border text-xs">
+                    <p>$ pkg update && pkg upgrade</p>
+                    <p>$ pkg install tmux vim git</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* iOS Protocol */}
+          <div className="border border-border bg-card p-6 space-y-4">
+            <h3 className="text-xl font-bold text-primary flex items-center gap-2">
+              <span className="text-xs bg-primary text-black px-1">APPLE</span>
+              <span>ISH_SHELL_PROTOCOL</span>
+            </h3>
+            <div className="space-y-4 text-sm text-muted-foreground font-mono">
+              <div className="flex gap-4">
+                <span className="text-primary">01.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Acquire iSH Shell</p>
+                  <p>Install "iSH Shell" from the App Store. This provides a localized Alpine Linux environment.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-primary">02.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Package Management</p>
+                  <p>iSH uses Alpine's 'apk' package manager.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-primary">03.</span>
+                <div>
+                  <p className="mb-1 text-foreground">Deploy Tmux</p>
+                  <div className="bg-black p-2 mt-1 border border-border text-xs">
+                    <p>$ apk update</p>
+                    <p>$ apk add tmux vim openssh</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Cheat Sheet */}
       <section className="container px-4 py-12 border-t border-border">
-        <h2 className="text-2xl font-bold mb-8">QUICK_REFERENCE_CARD</h2>
+        <h2 className="text-2xl font-bold mb-8">COMMAND_REFERENCE_MATRIX</h2>
         <div className="grid md:grid-cols-2 gap-4">
           {[
+            { cmd: "tmux new -s <name>", desc: "Start new named session" },
+            { cmd: "tmux a -t <name>", desc: "Attach to existing session" },
+            { cmd: "tmux ls", desc: "List all active sessions" },
+            { cmd: "Ctrl+b d", desc: "Detach from current session" },
             { cmd: "Ctrl+b %", desc: "Split pane vertically" },
             { cmd: 'Ctrl+b "', desc: "Split pane horizontally" },
-            { cmd: "Ctrl+b o", desc: "Swap to next pane" },
+            { cmd: "Ctrl+b <arrows>", desc: "Navigate between panes" },
+            { cmd: "Ctrl+b z", desc: "Toggle pane zoom (maximize)" },
             { cmd: "Ctrl+b c", desc: "Create new window" },
-            { cmd: "Ctrl+b n", desc: "Next window" },
-            { cmd: "Ctrl+b d", desc: "Detach session" },
+            { cmd: "Ctrl+b n", desc: "Move to next window" },
+            { cmd: "Ctrl+b ,", desc: "Rename current window" },
+            { cmd: "Ctrl+b [", desc: "Enter copy/scroll mode" },
           ].map((item, i) => (
             <div
               key={i}
               className="flex items-center justify-between p-4 border border-border bg-card/50 hover:bg-card transition-colors group"
             >
-              <span className="text-muted-foreground group-hover:text-foreground transition-colors">{item.desc}</span>
-              <code className="bg-secondary px-2 py-1 text-primary text-xs">{item.cmd}</code>
+              <span className="text-muted-foreground group-hover:text-foreground transition-colors text-sm font-mono">
+                {item.desc}
+              </span>
+              <code className="bg-secondary px-2 py-1 text-primary text-xs border border-primary/20">{item.cmd}</code>
             </div>
           ))}
         </div>
