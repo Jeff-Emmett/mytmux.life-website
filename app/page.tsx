@@ -397,6 +397,95 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Learning Resources Section */}
+      <section className="container px-4 py-12 border-t border-border">
+        <h2 className="text-2xl font-bold mb-8">LEARNING_RESOURCES</h2>
+
+        {/* Video Tutorials */}
+        <div className="mb-12">
+          <h3 className="text-xl font-bold text-primary mb-4">VIDEO_TUTORIALS</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <a
+              href="https://www.youtube.com/watch?v=niuOc02Rvrc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-border bg-card p-6 hover:bg-card/80 hover:border-primary transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-primary text-xl">▶</span>
+                <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground">YouTube</span>
+              </div>
+              <p className="text-sm">Intro to tmux</p>
+            </a>
+
+            <a
+              href="https://www.youtube.com/watch?v=jaI3Hcw-ZaA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-border bg-card p-6 hover:bg-card/80 hover:border-primary transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-primary text-xl">▶</span>
+                <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground">YouTube</span>
+              </div>
+              <p className="text-sm">Advanced tmux workflows</p>
+            </a>
+
+            <a
+              href="https://www.youtube.com/watch?v=nTqu6w2wc68"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-border bg-card p-6 hover:bg-card/80 hover:border-primary transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-primary text-xl">▶</span>
+                <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground">YouTube</span>
+              </div>
+              <p className="text-sm">Deep dive into tmux</p>
+            </a>
+          </div>
+        </div>
+
+        {/* Credits and References */}
+        <div className="border border-primary/30 bg-primary/5 p-6">
+          <h3 className="text-xl font-bold text-primary mb-4">INSPIRATION_&_CREDITS</h3>
+          <div className="space-y-4 text-sm text-muted-foreground">
+            <p className="text-foreground">
+              Special thanks to{" "}
+              <a
+                href="https://github.com/dvbuntu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline font-mono"
+              >
+                Danielle Van Boxel
+              </a>{" "}
+              for inspiring much of Shawn Anderson's early tmux.conf configuration.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <a
+                href="https://github.com/dvbuntu/.files/blob/master/.tmux.conf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-border bg-card hover:bg-card/80 hover:border-primary transition-all font-mono text-xs"
+              >
+                <span className="text-primary">&gt;</span>
+                View tmux.conf
+              </a>
+              <a
+                href="https://github.com/dvbuntu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-border bg-card hover:bg-card/80 hover:border-primary transition-all font-mono text-xs"
+              >
+                <span className="text-primary">&gt;</span>
+                GitHub Profile
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
