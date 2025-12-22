@@ -7,9 +7,35 @@ import Link from "next/link"
 const vt323 = VT323({ weight: "400", subsets: ["latin"], variable: "--font-vt323" })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mytmux.life"),
   title: "mytmux.life - Terminal Multiplexer Configurator",
   description: "Architect your perfect terminal development environment.",
-    generator: 'v0.app'
+  generator: "v0.app",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖥️</text></svg>",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://mytmux.life",
+    title: "mytmux.life - Terminal Multiplexer Configurator",
+    description: "Architect your perfect terminal development environment.",
+    siteName: "mytmux.life",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "mytmux.life - Terminal Multiplexer Configurator",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "mytmux.life - Terminal Multiplexer Configurator",
+    description: "Architect your perfect terminal development environment.",
+    images: ["/og-image.jpg"],
+  },
 }
 
 export default function RootLayout({
