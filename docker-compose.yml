@@ -4,6 +4,21 @@ services:
     image: mytmux-prod:latest
     container_name: mytmux-prod
     restart: always
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    security_opt:
+      - no-new-privileges:true
     networks:
       - traefik-public
     labels:
